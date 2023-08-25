@@ -1,0 +1,12 @@
+@import 'bootstrap';
+@import 'ol/ol.css';
+@import 'sb-dashboard.css';
+
+
+#main {
+  height: 1000px;
+}
+
+#data-panel {
+  width: 90%;
+}
