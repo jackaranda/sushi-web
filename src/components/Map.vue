@@ -16,6 +16,9 @@ import { reactive, onMounted } from 'vue'
 
 import axios from 'axios';
 
+
+
+
 const defaultStyle = new Style({
   stroke: new Stroke({
     color: 'rgba(64, 64, 64, 0.7)',
@@ -51,33 +54,44 @@ const props = defineProps({
   featureID: String
 });
 
+const month_names = {
+  1:'Jan', 
+  2:'Feb', 
+  3:'Mar', 
+  4:'Apr', 
+  5:'May', 
+  6:'Jun', 
+  7:'Jul', 
+  8:'Aug', 
+  9:'Sep', 
+  10:'Oct', 
+  11:'Nov', 
+  12:'Dec',
+  13:'Jan',  
+  14:'Feb', 
+  15:'Mar', 
+  16:'Apr', 
+  17:'May', 
+  18:'Jun'
+};
+
+const today = new Date();
+const forecast_month = today.getMonth()+1;
+
+let month_selection = Object.fromEntries(Object.entries(month_names).slice(today.getMonth(), today.getMonth()+7));
+
+console.log('forecast month');
+console.log(forecast_month);
+
 const state = reactive({
   'hover': null, 
   'selected': null, 
-  'featureID': 555,
+  'featureID': '555',
   'active':false,
   'anomaly':null,
-  'months':[1,12],
-  'month_names':{
-    1:'Jan', 
-    2:'Feb', 
-    3:'Mar', 
-    4:'Apr', 
-    5:'May', 
-    6:'Jun', 
-    7:'Jul', 
-    8:'Aug', 
-    9:'Sep', 
-    10:'Oct', 
-    11:'Nov', 
-    12:'Dec',
-    13:'Jan', 
-    14:'Feb', 
-    15:'Mar', 
-    16:'Apr', 
-    17:'May', 
-    18:'Jun', 
-  },
+  'forecast_month':forecast_month,
+  'months':[today.getMonth()+1,today.getMonth()+7],
+  'month_selection':month_selection,
   'leads':[0,5],
   'lead_names':{
     0: 'July',
@@ -97,7 +111,6 @@ onMounted(() => {
 
   console.log(props);
 
-  state.months = [1,12];
   state.anomaly = 'none';
   state.featureID = props.featureID;
 
@@ -163,6 +176,11 @@ onMounted(() => {
 
 });
 
+function update(event) {
+  console.log('BINGO');
+  console.log(event);
+}
+
 </script>
 
 <template>
@@ -179,9 +197,9 @@ onMounted(() => {
     </div>
 
     <div class="row">
-      <div class="col-8">
+      <div class="col-10">
         <h3>Select months of the year</h3>
-        <v-range-slider min="1" max="18" :step="1" :ticks="state.month_names" v-model="state.months" strict show-ticks="always"></v-range-slider>
+        <v-range-slider min="8" max="14" :step="1" :ticks="state.month_selection" v-model="state.months" strict show-ticks="always"></v-range-slider>
         <v-radio-group enabled v-model="state.anomaly" inline mandatory label="Plot options">
           <v-radio key=0 label="Real values" value="none"></v-radio>
           <v-radio key=1 label="Absolute anomaly" value="absolute"></v-radio>
@@ -190,20 +208,17 @@ onMounted(() => {
       </div>
     </div>
     <div class="row">
-      <div class="col-8">        
+      <div class="col-10">        
         <Plot collection="observed" dataset="pr_mon_CHG-CHIRPS2.0_hexgrid_p25" variable="pr" :featureID="state.featureID" :startmonth="state.months[0]" :endmonth="state.months[1]" type="bar" timeagg="annual" :anomaly="state.anomaly"></Plot>
       </div>
-    </div>
-
-    <div class="row">
-      <div class="col-1">
+      <div class="col-2">
         <h3>Event threshold</h3>
-        <v-slider :min="state.minval" :max="state.maxval" :step="20" v-model="state.threshold" thumb-label="always" direction="vertical"></v-slider>
+        <v-slider :min="state.minval" :max="state.maxval" :step="20" :draggable="false" v-model="state.threshold" thumb-label="always" direction="vertical"></v-slider>
       </div>
-      <div class="col-8">
-        <strong><center>Select forecast month range</center></strong>
-        <v-range-slider min="0" max="5" :step="1" :ticks="state.lead_names" v-model="state.leads" strict show-ticks="always"></v-range-slider>
-        <Forecast model="system51" fcst_year="2023" fcst_month="07" variable="pr" :start_lead="state.leads[0]" :end_lead="state.leads[1]" :featureID="state.featureID" :threshold="state.threshold"></Forecast>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <Forecast model="system51" fcst_year="2023" :fcst_month="state.forecast_month" variable="pr" :start_lead="state.months[0]-state.forecast_month" :end_lead="state.months[1]-state.forecast_month" :featureID="state.featureID" :threshold="state.threshold"></Forecast>
       </div>
     </div>
 

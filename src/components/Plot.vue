@@ -8,7 +8,7 @@ const props = defineProps({
     collection: String,
     dataset: String,
     variable: String,
-    featureID: Number,
+    featureID: String,
     type: String,
     timeagg: String,
     anomaly: String,
@@ -26,7 +26,8 @@ onMounted(() => {
 
 onUpdated(() => {
 
-    console.log('Plot updating')
+    console.log('Plot updating');
+    console.log(props);
 
     axios.get('http://localhost:5000/dataset/'+props.collection+'/'+props.dataset+'/'+props.variable+'/'+props.featureID+'/', 
         {
@@ -54,7 +55,7 @@ onUpdated(() => {
         })
       .catch(function (error) {
           // handle error
-          console.log(error);
+          console.log(error['message']);
         })
       .finally(function () {
           // always executed
