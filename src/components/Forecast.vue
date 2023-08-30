@@ -111,7 +111,8 @@ onUpdated(() => {
         </div>        
         <div class="col-6">
             <h3>Event forecast</h3>
-            <p>The current forecast indicates a probability of <strong> {{ state.prob_below }}%</strong>  of this occuring this year</p>
+            <p>The current forecast indicates a probability of <strong> {{ state.prob_below }}%</strong>  of this occuring this year.  
+            This is <strong>{{ (state.prob_below / state.obs_percentile).toFixed(1) }} times</strong> more than the long term probability</p>
             <p>In previous years the model forecast this event <strong>{{ state.hits_below + state.falses_below }} times</strong> </p>
             <p><strong>{{ state.hits_below }} times</strong>, this forecast was correct and predicted the event</p>
             <p><strong>{{ state.falses_below }} times</strong>, this forecast was incorrect, the event did not occur</p>
