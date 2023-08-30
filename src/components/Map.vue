@@ -165,7 +165,7 @@ onMounted(() => {
       f.setStyle(selectStyle);
 
       state.active = true;
-      state.featureID = string(f.get('id'));
+      state.featureID = f.get('id').toString();
 
       return true;
     });
