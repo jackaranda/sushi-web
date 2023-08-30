@@ -61,6 +61,13 @@ onUpdated(() => {
 
     console.log('Forecast updating '+props.fcst_month+' '+props.start_lead+' '+props.end_lead);
 
+    state.obs_percentile = '[calculating..]';
+    state.hits_below = '[calculating..]';
+    state.misses_below = '[calculating..]';
+    state.falses_below = '[calculating..]';
+    state.prob_below = '[calculating..]';
+    state.fcst_below = '[calculating..]';
+
     axios.get('http://localhost:5000/forecast/seasonal/'+props.model+'/'+props.fcst_year+'/'+props.fcst_month+'/'+props.variable+'/'+props.featureID, 
         {
             params: {
@@ -94,16 +101,22 @@ onUpdated(() => {
 </script>
 
 <template>
-    <div>
-        <h3>Current Forecast</h3>
-        <p>The long term probability of rainfall less that <strong>{{ threshold}} mm</strong> from <strong>{{ month_names[fcst_month + start_lead] }} to {{ month_names[fcst_month + end_lead] }}</strong> is <strong>{{ state.obs_percentile }}%</strong> 
-            and this has occured <strong>{{ state.hits_below + state.misses_below }} times</strong> in the past 41 years</p>
-        <p>The current forecast indicates a probability of <strong> {{ state.prob_below }}%</strong>  of this occuring this year</p> 
-        <p>In previous years this event was forecast <strong>{{ state.hits_below + state.falses_below }} times</strong> </p>
-        <p><strong>{{ state.hits_below }} times</strong>, this forecast was correct and predicted the occurence</p>
-        <p><strong>{{ state.falses_below }} times</strong>, this forecast was incorrect, the event did not occur</p>
-        <p><strong>{{ state.misses_below }} times</strong>, the forecast failed to predict an actual occurence</p>
-    </div>
+        <div class="col-2">
+            <h3>Historical event occurence</h3>
+            <p>Rainfall less than <strong>{{ threshold}} mm</strong> between 
+                <strong>{{ month_names[fcst_month + start_lead] }} to {{ month_names[fcst_month + end_lead] }}</strong> 
+                has occured <strong>{{ state.hits_below + state.misses_below }} times</strong> in the past 41 years
+            </p>
+            <p>This means that the long term probability of this occuring is <strong>{{ state.obs_percentile }}%</strong></p>
+        </div>        
+        <div class="col-6">
+            <h3>Event forecast</h3>
+            <p>The current forecast indicates a probability of <strong> {{ state.prob_below }}%</strong>  of this occuring this year</p>
+            <p>In previous years the model forecast this event <strong>{{ state.hits_below + state.falses_below }} times</strong> </p>
+            <p><strong>{{ state.hits_below }} times</strong>, this forecast was correct and predicted the event</p>
+            <p><strong>{{ state.falses_below }} times</strong>, this forecast was incorrect, the event did not occur</p>
+            <p><strong>{{ state.misses_below }} times</strong>, the forecast failed to predict an actual occurence</p>
+        </div>
 </template>
 
 <style scoped>

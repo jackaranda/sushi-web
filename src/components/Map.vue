@@ -130,8 +130,8 @@ onMounted(() => {
     ],
   
     view: new View({
-      center: [2200000, -4000000],
-      zoom: 7,
+      center: [2200000, -3400000],
+      zoom: 5,
     }),
 
   });
@@ -165,7 +165,7 @@ onMounted(() => {
       f.setStyle(selectStyle);
 
       state.active = true;
-      state.featureID = f.get('id');
+      state.featureID = string(f.get('id'));
 
       return true;
     });
@@ -189,16 +189,20 @@ function update(event) {
       
       <div class="col-6">
         <div id="map"></div>
+        <div>Select a location on the map by clicking on the nearest hexagon</div>
       </div>
       <div class="col-4">
         <h3>Seasonal cycle</h3>
+        <div>This plot shows the long term average monthly total rainfall (mm/month) for the location you have selected</div>
         <Plot collection="observed" dataset="pr_mon_CHG-CHIRPS2.0_hexgrid_p25" variable="pr" :featureID="state.featureID" type="bar" timeagg="seasonal"></Plot>
+        
       </div>
     </div>
 
     <div class="row">
       <div class="col-10">
-        <h3>Select months of the year</h3>
+        <h3>Season selection</h3>
+        <p>Select the range of forecast months you are interested in by dragging the start and end sliders</p>
         <v-range-slider min="8" max="14" :step="1" :ticks="state.month_selection" v-model="state.months" strict show-ticks="always"></v-range-slider>
         <v-radio-group enabled v-model="state.anomaly" inline mandatory label="Plot options">
           <v-radio key=0 label="Real values" value="none"></v-radio>
@@ -208,18 +212,19 @@ function update(event) {
       </div>
     </div>
     <div class="row">
-      <div class="col-10">        
-        <Plot collection="observed" dataset="pr_mon_CHG-CHIRPS2.0_hexgrid_p25" variable="pr" :featureID="state.featureID" :startmonth="state.months[0]" :endmonth="state.months[1]" type="bar" timeagg="annual" :anomaly="state.anomaly"></Plot>
-      </div>
       <div class="col-2">
         <h3>Event threshold</h3>
+        <p>Select a total amount of rainfall that defines a "dry" event</p>
         <v-slider :min="state.minval" :max="state.maxval" :step="20" :draggable="false" v-model="state.threshold" thumb-label="always" direction="vertical"></v-slider>
+      </div>
+      <div class="col-8"> 
+        <h3>Historical observed rainfall</h3>
+        <p>This plot shows how much it rained during the selected months through the last 41 years</p>       
+        <Plot collection="observed" dataset="pr_mon_CHG-CHIRPS2.0_hexgrid_p25" variable="pr" :featureID="state.featureID" :startmonth="state.months[0]" :endmonth="state.months[1]" type="bar" timeagg="annual" :anomaly="state.anomaly"></Plot>
       </div>
     </div>
     <div class="row">
-      <div class="col-12">
         <Forecast model="system51" fcst_year="2023" :fcst_month="state.forecast_month" variable="pr" :start_lead="state.months[0]-state.forecast_month" :end_lead="state.months[1]-state.forecast_month" :featureID="state.featureID" :threshold="state.threshold"></Forecast>
-      </div>
     </div>
 
 </template>
