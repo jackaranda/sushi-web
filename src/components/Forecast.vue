@@ -61,7 +61,7 @@ onUpdated(() => {
 
     console.log('Forecast updating '+props.fcst_month+' '+props.start_lead+' '+props.end_lead);
 
-    axios.get('http://localhost:5000/forecast/seasonal/'+props.model+'/'+props.fcst_year+'/'+props.fcst_month+'/'+props.variable+'/'+props.featureID+'/', 
+    axios.get('http://localhost:5000/forecast/seasonal/'+props.model+'/'+props.fcst_year+'/'+props.fcst_month+'/'+props.variable+'/'+props.featureID, 
         {
             params: {
                 threshold: props.threshold,

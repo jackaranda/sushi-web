@@ -123,7 +123,7 @@ onMounted(() => {
       new VectorLayer({
         source: new VectorSource({
           format: new GeoJSON(),
-          url: 'src/assets/data/mapping/' + props.features + '.json',
+          url: 'data/mapping/' + props.features + '.json',
           style: defaultStyle
         }),
       }),
