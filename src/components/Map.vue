@@ -76,9 +76,9 @@ const month_names = {
 };
 
 const today = new Date();
-const forecast_month = today.getMonth()+1;
+const forecast_month = today.getMonth()-1;
 
-let month_selection = Object.fromEntries(Object.entries(month_names).slice(today.getMonth(), today.getMonth()+7));
+let month_selection = Object.fromEntries(Object.entries(month_names).slice(forecast_month-1, forecast_month+6));
 
 console.log('forecast month');
 console.log(forecast_month);
@@ -90,7 +90,7 @@ const state = reactive({
   'active':false,
   'anomaly':null,
   'forecast_month':forecast_month,
-  'months':[today.getMonth()+1,today.getMonth()+7],
+  'months':[forecast_month,forecast_month+6],
   'month_selection':month_selection,
   'leads':[0,5],
   'lead_names':{

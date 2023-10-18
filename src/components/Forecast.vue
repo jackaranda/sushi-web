@@ -54,8 +54,7 @@ onMounted(() => {
 onUpdated(() => {
 
     if (state.updating == true) { 
-        console.log('already updating');
-        return 0; 
+      return 0;
     }
     state.updating = true;
 
@@ -68,7 +67,7 @@ onUpdated(() => {
     state.prob_below = '[calculating..]';
     state.fcst_below = '[calculating..]';
 
-    axios.get('http://localhost:5000/forecast/seasonal/'+props.model+'/'+props.fcst_year+'/'+props.fcst_month+'/'+props.variable+'/'+props.featureID, 
+    axios.get('/sfwt-server/forecast/seasonal/'+props.model+'/'+props.fcst_year+'/'+props.fcst_month+'/'+props.variable+'/'+props.featureID, 
         {
             params: {
                 threshold: props.threshold,

@@ -29,7 +29,7 @@ onUpdated(() => {
     console.log('Plot updating');
     console.log(props);
 
-    axios.get('http://localhost:5000/dataset/'+props.collection+'/'+props.dataset+'/'+props.variable+'/'+props.featureID, 
+    axios.get('/sfwt-server/dataset/'+props.collection+'/'+props.dataset+'/'+props.variable+'/'+props.featureID, 
         {
             params: {
                 timeagg: props.timeagg,
